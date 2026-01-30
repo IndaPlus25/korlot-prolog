@@ -13,13 +13,38 @@ load_board(BoardFileName, Board):-
     read(Board),            % Reads the first Prolog-term from the file
     seen.                   % Closes the io-stream
 
-% Checks whether the group of stones connected to
-% the stone lmn) is alive or dead.
-check_stone_colour(Row, Column, Board):-
+% Checks if stone located at (Row, Column) is alive or dead.
+check_stone_exist(Row, Column, Board):-
     nth1_2d(Row, Column, Board, Stone),
-    (Stone = b; Stone = w). % Example statement so that the function returns. Substitute this with your own logicocated at (Row, Colu
+    (Stone = b; Stone = w).
+
+white_plays([]).
+black_plays([]).
+adjacent_empty([]).
+%add colour in focus if needed
+
+update_played_list ():-
+        %create coordinate
+        %Check colour
+        %if White add coordiante to white list
+        %if black add cooritnate to black list
+        %else add to empty list
 
 check_area_is_living(Row, Column, Board):-
-    check_stone_colour(Row, Column, Board) -> 
-    check_area(); 
-    write("this is an empty spot").
+    (   check_stone_exist(Row, Column, Board) ->       %Do this if we landed on a stone
+        %update lists
+        %control if stone above is same colour/empty and update list
+        %Updated list? Repeat
+        %control if stone to the right is colour/empty and update list
+        %Updated list? Repeat
+        %control if stone under is colour/empty and update list
+        %Updated list? Repeat
+        %control if stone to the left is colour/empty and update list
+        %Updated list? Repeat
+        %control if adjecent_empty is empty
+        write("This group is alive :D --;--,-@")
+        %else
+        write("This group is dead! ;( )")
+        ; 
+        write("This is an empty spot")                  %else do this
+    ).

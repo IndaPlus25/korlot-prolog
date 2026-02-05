@@ -32,7 +32,8 @@ check_contecting_stones(Row, Column, Board, Start):-
     nth1_2d(Row, Column, Board, Stone),
     (   Stone == e ->
         change_status("Group is alive"),
-        write_status
+        write_status,
+        !
     ;
         Stone == w,
         \+ member((Row,Column), Start),
@@ -48,5 +49,7 @@ check_contecting_stones(Row, Column, Board, Start):-
     ).
 
 check_area_is_living(Row, Column, Board):-
-    check_contecting_stones(Row, Column, Board, Start),
-    write_status.
+    check_stone_exist(Row, Column, Board),
+    check_contecting_stones(Row, Column, Board, []),
+    write_status,
+    true.

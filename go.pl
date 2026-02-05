@@ -18,33 +18,35 @@ check_stone_exist(Row, Column, Board):-
     nth1_2d(Row, Column, Board, Stone),
     (Stone = b; Stone = w).
 
-white_plays([]).
-black_plays([]).
-adjacent_empty([]).
-%add colour in focus if needed
+status("Group is dead").
 
-update_played_list ():-
-        %create coordinate
-        %Check colour
-        %if White add coordiante to white list
-        %if black add cooritnate to black list
-        %else add to empty list
+change_status(New_status):-
+    retract(status(_)),
+    assert(status(New_status)).
+
+write_status :-
+    status(Text),
+    write(Text).
+
+check_contecting_stones(Row, Column, Board, Start):-
+    nth1_2d(Row, Column, Board, Stone),
+    (   Stone == e ->
+        change_status("Group is alive"),
+        write_status
+    ;
+        Stone == w,
+        \+ member((Row,Column), Start),
+        Next_space = [(Row, Column)|Start],
+        Up is Row - 1,
+        Right is Column + 1,
+        Down is Row + 1,
+        Left is Column -1,
+        check_contecting_stones(Up, Column, Board, Next_space),
+        check_contecting_stones(Row, Right, Board, Next_space),
+        check_contecting_stones(Down, Column, Board, Next_space),
+        check_contecting_stones(Row, Left, Board, Next_space)
+    ).
 
 check_area_is_living(Row, Column, Board):-
-    (   check_stone_exist(Row, Column, Board) ->       %Do this if we landed on a stone
-        %update lists
-        %control if stone above is same colour/empty and update list
-        %Updated list? Repeat
-        %control if stone to the right is colour/empty and update list
-        %Updated list? Repeat
-        %control if stone under is colour/empty and update list
-        %Updated list? Repeat
-        %control if stone to the left is colour/empty and update list
-        %Updated list? Repeat
-        %control if adjecent_empty is empty
-        write("This group is alive :D --;--,-@")
-        %else
-        write("This group is dead! ;( )")
-        ; 
-        write("This is an empty spot")                  %else do this
-    ).
+    check_contecting_stones(Row, Column, Board, Start),
+    write_status.
